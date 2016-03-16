@@ -8,9 +8,9 @@ plt.close('all')
 
 #fragment = '../traditional_dataset/syrinx/fragments/syrinx_first_fragment_douglas'
 #fragment = '../traditional_dataset/syrinx/fragments/syrinx_second_fragment_dwyer'
-#fragment = '../traditional_dataset/syrinx/fragments/syrinx_third_fragment_rhodes'
+fragment = '../traditional_dataset/syrinx/fragments/syrinx_third_fragment_rhodes'
 #fragment = '../traditional_dataset/syrinx/fragments/syrinx_fourth_fragment_bernold'
-fragment = '../traditional_dataset/syrinx/fragments/syrinx_fifth_fragment_bourdin'
+#fragment = '../traditional_dataset/syrinx/fragments/syrinx_fifth_fragment_bourdin'
 
 #fragment = '../traditional_dataset/allemande/fragments/allemande_first_fragment_nicolet'
 #fragment = '../traditional_dataset/allemande/fragments/allemande_second_fragment_gerard'
