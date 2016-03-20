@@ -181,4 +181,13 @@ plt.tight_layout()
 
 plt.show()
 
+#%% 
+
+ar = librosa.autocorrelate(audio, max_size = 1024)
+
+#%%
+plt.figure()
+plt.plot(ar)
+
+
 
