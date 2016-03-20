@@ -86,30 +86,30 @@ for i in range(1,len(onset)):
         f0_gt[j]=aux_f0_gt[i-1]
         j=j+1 
 
-#plt.figure(figsize=(18,6))
-#plt.subplot(3,1,1)
-#plt.plot(t, audio)
-#plt.grid()
-#plt.title(fragment)
-#plt.tight_layout()
-#
-#plt.subplot(3,1,2)
-#plt.plot(t_rms, rms, label='RMS Energy')
-#plt.plot(t_rms, (max(rms)/2)*vad_gt, label='VAD_gt')
-#plt.grid()
-#plt.xlabel('Time (s)')
-#plt.legend(loc='best')
-#plt.tight_layout()
-#
-#plt.subplot(3,1,3)
-#plt.plot(t_zc, f0_gt, 'r', label='f0_gt')
-#plt.plot(t_zc, 44100*zero_crossing/2, 'k', label='zero_crossing')
-#plt.grid()
-#plt.xlabel('Time (s)')
-#plt.legend(loc='best')
-#plt.tight_layout()
-#
-#plt.show()
+plt.figure(figsize=(18,6))
+plt.subplot(3,1,1)
+plt.plot(t, audio)
+plt.grid()
+plt.title(fragment)
+plt.tight_layout()
+
+plt.subplot(3,1,2)
+plt.plot(t_rms, rms, label='RMS Energy')
+plt.plot(t_rms, (max(rms)/2)*vad_gt, label='VAD_gt')
+plt.grid()
+plt.xlabel('Time (s)')
+plt.legend(loc='best')
+plt.tight_layout()
+
+plt.subplot(3,1,3)
+plt.plot(t_zc, f0_gt, 'r', label='f0_gt')
+plt.plot(t_zc, 44100*zero_crossing/2, 'k', label='zero_crossing')
+plt.grid()
+plt.xlabel('Time (s)')
+plt.legend(loc='best')
+plt.tight_layout()
+
+plt.show()
 
 #%%
 
