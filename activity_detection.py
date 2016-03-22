@@ -185,4 +185,13 @@ f0_max = f[ind_max]
 #
 #plt.show()
 
+#%% 
+
+ar = librosa.autocorrelate(audio, max_size = 1024)
+
+#%%
+plt.figure()
+plt.plot(ar)
+
+
 
