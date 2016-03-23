@@ -16,7 +16,7 @@ def tonalness(audio, fs=44100, nfft=1024, noverlap=512):
         S_harmonics[i]=np.sum(Sxx[ind_peaks[i],i]) 
      
     E = np.sum(Sxx, axis=0) 
-    E = E - S_harmonics
+    #E = E - S_harmonics
     result = np.divide(S_harmonics,E)    
     
     

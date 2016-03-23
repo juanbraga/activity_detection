@@ -78,37 +78,20 @@ plt.grid()
 plt.title(fragment)
 plt.tight_layout()
 
-<<<<<<< HEAD:vad_rms.py
-plt.figure(figsize=(18,6))
-plt.subplot(3,1,1)
-plt.plot(t, audio)
-plt.grid()
-plt.title(fragment)
-plt.tight_layout()
-
-plt.subplot(3,1,2)
-plt.plot(t_rms, rms, label='RMS Energy')
-plt.plot(t_rms, (max(rms)/2)*vad_gt, label='VAD_gt')
-=======
 plt.subplot(3,1,2)
 plt.plot(t_rms, rms/max(rms), 'r', label='librosa:rmse')
 plt.plot(t_ae, ae/max(ae), 'k', label='stf:average_energy')
 plt.plot(t_rms, 0.5*vad_gt, label='VAD_gt')
->>>>>>> 6ce3a6b67913eed26a5daea0da910dad602eb842:activity_detection.py
+
 plt.grid()
 plt.xlabel('Time (s)')
 plt.legend(loc='best')
 plt.tight_layout()
 
 plt.subplot(3,1,3)
-<<<<<<< HEAD:vad_rms.py
-plt.plot(t_zc, f0_gt, 'r', label='f0_gt')
-plt.plot(t_zc, 44100*zero_crossing/2, 'k', label='zero_crossing')
-=======
 plt.plot(t_zero_crossing, zero_crossing/max(zero_crossing), 'r', label='librosa:zero_crossing_rate')
 plt.plot(t_zcr, zcr/max(zcr), 'k', label='stf:zero_crossing_rate')
 plt.plot(t_rms, 0.5*vad_gt, label='VAD_gt')
->>>>>>> 6ce3a6b67913eed26a5daea0da910dad602eb842:activity_detection.py
 plt.grid()
 plt.xlabel('Time (s)')
 plt.legend(loc='best')
