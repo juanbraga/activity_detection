@@ -3,6 +3,7 @@
 import numpy as np
 from scipy import signal
 import matplotlib.pyplot as plt
+import scipy.io.wavfile as wav
 
 def tonalness(audio, fs=44100, nfft=1024, noverlap=512):
     
@@ -16,7 +17,7 @@ def tonalness(audio, fs=44100, nfft=1024, noverlap=512):
         S_harmonics[i]=np.sum(Sxx[ind_peaks[i],i]) 
      
     E = np.sum(Sxx, axis=0) 
-    #E = E - S_harmonics
+    E = E - S_harmonics
     result = np.divide(S_harmonics,E)    
     
     
@@ -24,7 +25,7 @@ def tonalness(audio, fs=44100, nfft=1024, noverlap=512):
 
 if __name__ == "__main__":  
 
-    fragment = '../traditional_dataset/density/fragments/density_first_fragment_zoon'
+    #fragment = '../traditional_dataset/density/fragments/density_first_fragment_zoon'
     
     #fragment = '../traditional_dataset/syrinx/fragments/syrinx_first_fragment_douglas'
     #fragment = '../traditional_dataset/syrinx/fragments/syrinx_second_fragment_dwyer'
@@ -36,7 +37,7 @@ if __name__ == "__main__":
     #fragment = '../traditional_dataset/allemande/fragments/allemande_second_fragment_gerard'
     #fragment = '../traditional_dataset/allemande/fragments/allemande_third_fragment_rampal'
     #fragment = '../traditional_dataset/allemande/fragments/allemande_fourth_fragment_larrieu'
-    #fragment = '../traditional_dataset/allemande/fragments/allemande_fifth_fragment_preston'
+    fragment = '../traditional_dataset/allemande/fragments/allemande_fifth_fragment_preston'
     
     audio_file = fragment + '_mono.wav'
     gt_file = fragment + '.csv'
@@ -71,7 +72,7 @@ if __name__ == "__main__":
             vad_gt[j]=aux_vad_gt[i-1]
             j=j+1    
     
-    plt.figure()
+    plt.figure(figsize=(18,6))
     plt.subplot(2,1,1)    
     plt.pcolormesh(t_S, f, np.log(Sxx))
     plt.ylabel('Frequency [Hz]')

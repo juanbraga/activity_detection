@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 
-import short_time_features as stf
 import matplotlib.pyplot as plt
 import numpy as np
-import scipy.signal as signal
 import scipy.io.wavfile as wav
 
 def morph_close(audio, length):
@@ -42,7 +40,7 @@ if __name__ == "__main__":
     audio_closed, audio_abs = morph_close(audio, 4*880+1)
     
     
-    plt.figure()  
+    plt.figure(figsize=(18,6)) 
     plt.plot(t, audio_abs, 'r', label='wave')  
     plt.plot(t, audio_closed, 'k', label='envelope')
     plt.grid()
