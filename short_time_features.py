@@ -36,73 +36,68 @@ def morph_close(audio, fs=44100, n=1024):
     
 if __name__ == "__main__":  
 
-#    fragment = '../traditional_dataset/density/fragments/density_first_fragment_zoon'
-    
-#    fragment = '../traditional_dataset/syrinx/fragments/syrinx_first_fragment_douglas'
-#    fragment = '../traditional_dataset/syrinx/fragments/syrinx_second_fragment_dwyer'
-    fragment = '../traditional_dataset/syrinx/fragments/syrinx_third_fragment_rhodes'
-#    fragment = '../traditional_dataset/syrinx/fragments/syrinx_fourth_fragment_bernold'
-#    fragment = '../traditional_dataset/syrinx/fragments/syrinx_fifth_fragment_bourdin'
-    
-#    fragment = '../traditional_dataset/allemande/fragments/allemande_first_fragment_nicolet'
-#    fragment = '../traditional_dataset/allemande/fragments/allemande_second_fragment_gerard'
-#    fragment = '../traditional_dataset/allemande/fragments/allemande_third_fragment_rampal'
-#    fragment = '../traditional_dataset/allemande/fragments/allemande_fourth_fragment_larrieu'
-#    fragment = '../traditional_dataset/allemande/fragments/allemande_fifth_fragment_preston'
-    
-    audio_file = fragment + '_mono.wav'
-    gt_file = fragment + '.csv'
-    
-    fs, audio = wav.read(audio_file)
-    t = np.arange(len(audio)) * (1/44100.0)        
-    
-    frame_size=1024
-    
-    zcr, t_zcr = zero_crossing_rate(audio, fs, n=frame_size)   
-    ae, t_ae = average_energy(audio, fs, n=frame_size)
-        
     import csv
-    cr = csv.reader(open(gt_file,"rb"))
-    onset=[]
-    notes=[]
+    dataset=[]    
+    cr = csv.reader(open('dataset.csv',"rb"))
     for row in cr:
-        onset.append(row[0]) 
-        notes.append(row[1])
-    onset = np.array(onset, 'float32')
-    i=0
-    aux_vad_gt = np.empty([0,])
-    for note in notes:
-        if note=='0':
-            aux_vad_gt = np.r_[aux_vad_gt,0]
-        else:
-            aux_vad_gt = np.r_[aux_vad_gt,1]
-        i=i+1
-    j=0
-    vad_gt = np.empty([len(t),], 'int8')
-    for i in range(1,len(onset)):
-        while (j<len(t) and t[j]>=onset[i-1] and t[j]<=onset[i]):
-            vad_gt[j]=aux_vad_gt[i-1]
-            j=j+1    
+        dataset.append(row[0]) 
     
-    plt.figure()
-    plt.plot(t_zcr, zcr/float(max(zcr)), label='zero crossing rate')
-    plt.plot(t_ae, ae/float(max(ae)),label='average energy')    
-    plt.plot(t, vad_gt, label='activity detection (gt)')    
-    plt.grid()    
-    plt.ylabel('Amplitude')
-    plt.xlabel('Time [sec]')
+    total_zcr_silence = np.empty([0,])
+    total_ae_silence = np.empty([0,])
+    total_mc_silence = np.empty([0,])
+    total_zcr_activity = np.empty([0,])
+    total_ae_activity = np.empty([0,])
+    total_mc_activity = np.empty([0,])
+
+    for i in range(0,len(dataset)):
+    
+        silence_file = dataset[i] + '_silence.wav'
+        activity_file = dataset[i] + '_activity.wav'
+        
+        fs, audio_silence = wav.read(silence_file)
+        fs, audio_activity = wav.read(activity_file)        
+        
+        frame_size=1024
+        
+        zcr_silence, t_zcr_silence = zero_crossing_rate(audio_silence, fs, n=frame_size)  
+        zcr_activity, t_zcr_activity = zero_crossing_rate(audio_activity, fs, n=frame_size) 
+        ae_silence, t_ae_silence = average_energy(audio_silence, fs, n=frame_size)  
+        ae_activity, t_ae_activity = average_energy(audio_activity, fs, n=frame_size) 
+        mc_silence, t_mc_silence, dummy = morph_close(audio_silence, fs, n=frame_size)  
+        mc_activity, t_mc_activity, dummy = morph_close(audio_activity, fs, n=frame_size) 
+        
+        total_zcr_silence = np.r_[total_zcr_silence,zcr_silence]
+        total_ae_silence = np.r_[total_ae_silence,ae_silence]
+        total_mc_silence = np.r_[total_mc_silence,mc_silence]
+        total_zcr_activity = np.r_[total_zcr_activity,zcr_activity]
+        total_ae_activity = np.r_[total_ae_activity,ae_activity]
+        total_mc_activity = np.r_[total_mc_activity,mc_activity]
+
+
+#    plt.figure()    
+#    plt.subplot(3,1,1)    
+#    plt.plot(total_ae_activity)
+#    plt.plot(total_ae_silence)
+#    plt.grid()
+#    plt.axis('tight')
+#    plt.subplot(3,1,2)    
+#    plt.plot(total_zcr_activity)
+#    plt.plot(total_zcr_silence)    
+#    plt.grid()
+#    plt.axis('tight')    
+#    plt.subplot(3,1,3)    
+#    plt.plot(total_mc_activity)
+#    plt.plot(total_mc_silence)
+#    plt.grid()
+#    plt.axis('tight')    
+
+#%%
+    plt.figure()    
+    plt.subplot(3,1,1)    
+    plt.hist([total_zcr_activity, total_zcr_silence], bins = 200)
     plt.axis('tight')
-    plt.legend(loc='best')
-    plt.show()
-    
-    #%%
-    
-    plt.figure()
-    plt.plot(t_zcr[0:(len(t_zcr)-1)], np.diff(zcr), label='zero crossing rate')   
-    plt.plot(t, vad_gt, label='activity detection (gt)')    
-    plt.grid()    
-    plt.ylabel('Amplitude')
-    plt.xlabel('Time [sec]')
-    plt.axis('tight')
-    plt.legend(loc='best')
-    plt.show()
+    plt.subplot(3,1,2)    
+    plt.hist([total_ae_activity, total_ae_silence], bins = 200)
+    plt.axis('tight')    
+    plt.subplot(3,1,3)    
+    plt.hist([total_mc_activity, total_mc_silence], bins = 200)
