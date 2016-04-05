@@ -82,6 +82,7 @@ plt.subplot(3,1,2)
 plt.plot(t_rms, rms/max(rms), 'r', label='librosa:rmse')
 plt.plot(t_ae, ae/max(ae), 'k', label='stf:average_energy')
 plt.plot(t_rms, 0.5*vad_gt, label='VAD_gt')
+
 plt.grid()
 plt.xlabel('Time (s)')
 plt.legend(loc='best')
