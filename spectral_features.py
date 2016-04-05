@@ -3,6 +3,7 @@
 import numpy as np
 from scipy import signal
 import matplotlib.pyplot as plt
+import scipy.io.wavfile as wav
 
 def tonalness(audio, fs=44100, nfft=1024, noverlap=512):
     
@@ -19,8 +20,8 @@ def tonalness(audio, fs=44100, nfft=1024, noverlap=512):
     E = E - S_harmonics
     result = np.divide(S_harmonics,E)    
     
-    
     return result, Sxx, f, t_S
+
 
 if __name__ == "__main__":  
 
