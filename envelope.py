@@ -19,7 +19,7 @@ if __name__ == "__main__":
     
     fragment = '../traditional_dataset/density/fragments/density_first_fragment_zoon'
     
-    #fragment = '../traditional_dataset/syrinx/fragments/syrinx_first_fragment_douglas'
+#    fragment = '../traditional_dataset/syrinx/fragments/syrinx_first_fragment_douglas'
     #fragment = '../traditional_dataset/syrinx/fragments/syrinx_second_fragment_dwyer'
     #fragment = '../traditional_dataset/syrinx/fragments/syrinx_third_fragment_rhodes'
     #fragment = '../traditional_dataset/syrinx/fragments/syrinx_fourth_fragment_bernold'
@@ -40,7 +40,7 @@ if __name__ == "__main__":
     audio_closed, audio_abs = morph_close(audio, 4*880+1)
     
     
-    plt.figure()  
+    plt.figure(figsize=(18,6)) 
     plt.plot(t, audio_abs, 'r', label='wave')  
     plt.plot(t, audio_closed, 'k', label='envelope')
     plt.grid()
