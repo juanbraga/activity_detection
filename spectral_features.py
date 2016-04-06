@@ -31,25 +31,28 @@ if __name__ == "__main__":
     for row in cr:
         dataset.append(row[0]) 
 
-    total_tness = np.empty([0,])
+    total_tness_activity = np.empty([0,])
+    total_tness_silence = np.empty([0,])
 
     for i in range(0,len(dataset)):
     
-        audio_file = dataset[i] + '_silence.wav'
-        gt_file = dataset[i] + '.csv'
+        silence_file = dataset[i] + '_silence.wav'
+        activity_file = dataset[i] + '_activity.wav'
     
-        fs, audio = wav.read(audio_file)
-        t = np.arange(len(audio)) * (1/44100.0)        
+        fs, audio_silence = wav.read(silence_file)
+        fs, audio_activity = wav.read(activity_file)        
+              
         
         nfft=4096
         overlap=nfft/2
-        tness, Sxx, f, t_S = tonalness(audio, fs, nfft, overlap)
         
-        total_tness = np.r_[total_tness,tness]
+        tness_activity, Sxx, f, t_S = tonalness(audio_activity, fs, nfft, overlap)
+        tness_silence, Sxx, f, t_S = tonalness(audio_silence, fs, nfft, overlap)
         
-    plt.plot(total_tness)
-    plt.grid()
+        total_tness_activity = np.r_[total_tness_activity,tness_activity]
+        total_tness_silence = np.r_[total_tness_silence,tness_silence]
+        
+    plt.figure()        
+    plt.hist([total_tness_activity, total_tness_silence], bins = 200)
     plt.axis('tight')
     
-    tness_mean = np.mean(total_tness)
-    tness_var = np.var(total_tness)
