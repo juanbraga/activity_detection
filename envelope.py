@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 
-import short_time_features as stf
 import matplotlib.pyplot as plt
 import numpy as np
-import scipy.signal as signal
 import scipy.io.wavfile as wav
 
 def morph_close(audio, length):
