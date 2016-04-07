@@ -52,15 +52,15 @@ if __name__ == "__main__":
     plt.title('MFCC silence')
     plt.tight_layout()
     
-    # Projection on to the first 2 linear discriminant components
-print("Computing Linear Discriminant Analysis projection")
-X2 = X.copy()
-X2.flat[::X.shape[1] + 1] += 0.01  # Make X invertible
-t0 = time()
-X_lda = discriminant_analysis.LinearDiscriminantAnalysis(n_components=3).fit_transform(X2.transpose(), y)
-#plot_embedding(X_lda, y,
-#               "Linear Discriminant projection of the digits (time %.2fs)" %
-#               (time() - t0))
-fig1 = plt.figure(1, figsize=(8, 6))
-ax1 = fig1.add_subplot(111, projection='3d')
-ax1.scatter(X_lda[:,0], X_lda[:,1], X_lda[:,2], c=color)
+#    # Projection on to the first 2 linear discriminant components
+#    print("Computing Linear Discriminant Analysis projection")
+#    X2 = X.copy()
+#    X2.flat[::X.shape[1] + 1] += 0.01  # Make X invertible
+#    t0 = time()
+#    X_lda = discriminant_analysis.LinearDiscriminantAnalysis(n_components=3).fit_transform(X2.transpose(), y)
+#    #plot_embedding(X_lda, y,
+#    #               "Linear Discriminant projection of the digits (time %.2fs)" %
+#    #               (time() - t0))
+#    fig1 = plt.figure(1, figsize=(16, 9))
+#    ax1 = fig1.add_subplot(111, projection='3d')
+#    ax1.scatter(X_lda[:,0], X_lda[:,1], X_lda[:,2], c=color)
