@@ -73,7 +73,6 @@ if __name__ == "__main__":
         total_ae_activity = np.r_[total_ae_activity,ae_activity]
         total_mc_activity = np.r_[total_mc_activity,mc_activity]
 
-
 #    plt.figure()    
 #    plt.subplot(3,1,1)    
 #    plt.plot(total_ae_activity)
@@ -103,10 +102,8 @@ if __name__ == "__main__":
     plt.hist([total_mc_activity, total_mc_silence], bins = 200)
     
 #%%
-    
     plt.figure()
     plt.clf()
-    
     target = np.r_[np.ones(len(total_ae_activity)), np.zeros(len(total_ae_silence))]
     plt.scatter(np.r_[total_ae_activity, total_ae_silence], np.r_[total_zcr_activity, total_zcr_silence], c=target)
     plt.legend(loc='best')    

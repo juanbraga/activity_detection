@@ -41,7 +41,6 @@ if __name__ == "__main__":
     
         fs, audio_silence = wav.read(silence_file)
         fs, audio_activity = wav.read(activity_file)        
-              
         
         nfft=4096
         overlap=nfft/2

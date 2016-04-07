@@ -18,18 +18,18 @@ def morph_close(audio, length):
 if __name__ == "__main__":
     
     fragment = '../traditional_dataset/density/fragments/density_first_fragment_zoon'
-    
+
 #    fragment = '../traditional_dataset/syrinx/fragments/syrinx_first_fragment_douglas'
-    #fragment = '../traditional_dataset/syrinx/fragments/syrinx_second_fragment_dwyer'
-    #fragment = '../traditional_dataset/syrinx/fragments/syrinx_third_fragment_rhodes'
-    #fragment = '../traditional_dataset/syrinx/fragments/syrinx_fourth_fragment_bernold'
-    #fragment = '../traditional_dataset/syrinx/fragments/syrinx_fifth_fragment_bourdin'
+#    fragment = '../traditional_dataset/syrinx/fragments/syrinx_second_fragment_dwyer'
+#    fragment = '../traditional_dataset/syrinx/fragments/syrinx_third_fragment_rhodes'
+#    fragment = '../traditional_dataset/syrinx/fragments/syrinx_fourth_fragment_bernold'
+#    fragment = '../traditional_dataset/syrinx/fragments/syrinx_fifth_fragment_bourdin'
     
-    #fragment = '../traditional_dataset/allemande/fragments/allemande_first_fragment_nicolet'
-    #fragment = '../traditional_dataset/allemande/fragments/allemande_second_fragment_gerard'
-    #fragment = '../traditional_dataset/allemande/fragments/allemande_third_fragment_rampal'
-    #fragment = '../traditional_dataset/allemande/fragments/allemande_fourth_fragment_larrieu'
-    #fragment = '../traditional_dataset/allemande/fragments/allemande_fifth_fragment_preston'
+#    fragment = '../traditional_dataset/allemande/fragments/allemande_first_fragment_nicolet'
+#    fragment = '../traditional_dataset/allemande/fragments/allemande_second_fragment_gerard'
+#    fragment = '../traditional_dataset/allemande/fragments/allemande_third_fragment_rampal'
+#    fragment = '../traditional_dataset/allemande/fragments/allemande_fourth_fragment_larrieu'
+#    fragment = '../traditional_dataset/allemande/fragments/allemande_fifth_fragment_preston'
     
     audio_file = fragment + '_mono.wav'
     gt_file = fragment + '.csv'
@@ -76,8 +76,6 @@ if __name__ == "__main__":
     plt.grid()
     plt.title(fragment)
     plt.tight_layout()
-    
-    
     plt.subplot(2,1,2)
     plt.plot(t,audio_closed, label='envelope')
     plt.plot(t,(2**12)*vad_gt, label='VAD_gt')
@@ -85,6 +83,4 @@ if __name__ == "__main__":
     plt.xlabel('Time (s)')
     plt.legend(loc='best')
     plt.tight_layout()
-    
-    
     plt.show()
