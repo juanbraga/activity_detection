@@ -6,6 +6,7 @@ import scipy.io.wavfile as wav
 import numpy as np
 from sklearn import (manifold, decomposition, datasets, ensemble,
                      discriminant_analysis, random_projection)
+from sklearn.decomposition import PCA
 
 if __name__ == "__main__":  
 
@@ -21,6 +22,8 @@ if __name__ == "__main__":
     
     total_mfcc_silence = np.empty([melbands,])
     total_mfcc_activity = np.empty([melbands,])
+    total_mfcc = np.empty([melbands,])
+    labels = np.empty([1,], dtype='int16')
 
     for i in range(0,2):#len(dataset)):
     
@@ -37,6 +40,10 @@ if __name__ == "__main__":
         mfccs_activity = librosa.feature.mfcc(y=audio_activity, sr=fs, n_mfcc=melbands,
                                               n_mels=melbands, n_fft=winlen, hop_length=hop)        
         
+        aux_labels = np.r_[np.ones(len(mfccs_activity.T), dtype='int16'),np.zeros(len(mfccs_silence.T),dtype='int16')]
+        labels = np.r_[aux_labels, labels]
+        aux_total_mfcc = np.c_[mfccs_activity,mfccs_silence]
+        total_mfcc = np.c_[aux_total_mfcc,total_mfcc]        
         total_mfcc_silence = np.c_[total_mfcc_silence,mfccs_silence]
         total_mfcc_activity = np.c_[total_mfcc_activity,mfccs_activity]
         
@@ -51,16 +58,52 @@ if __name__ == "__main__":
     plt.colorbar()
     plt.title('MFCC silence')
     plt.tight_layout()
+
+    total_mfcc = total_mfcc.T    
     
-#    # Projection on to the first 2 linear discriminant components
-#    print("Computing Linear Discriminant Analysis projection")
-#    X2 = X.copy()
-#    X2.flat[::X.shape[1] + 1] += 0.01  # Make X invertible
-#    t0 = time()
-#    X_lda = discriminant_analysis.LinearDiscriminantAnalysis(n_components=3).fit_transform(X2.transpose(), y)
-#    #plot_embedding(X_lda, y,
-#    #               "Linear Discriminant projection of the digits (time %.2fs)" %
-#    #               (time() - t0))
-#    fig1 = plt.figure(1, figsize=(16, 9))
-#    ax1 = fig1.add_subplot(111, projection='3d')
-#    ax1.scatter(X_lda[:,0], X_lda[:,1], X_lda[:,2], c=color)
+#%%
+    from mpl_toolkits.mplot3d import Axes3D
+    print("Computing Isomap 2dim")
+    X_iso = manifold.Isomap(30, n_components=2).fit_transform(total_mfcc[:-1,:])
+#%%    
+    plt.figure(1, figsize=(8, 6))
+    plt.clf()
+    # Plot the training points
+    plt.scatter(X_iso[:, 0], X_iso[:, 1], c=labels[:-1], cmap=plt.cm.Paired)
+    plt.xlabel('1st')
+    plt.ylabel('2nd')
+    plt.show()
+
+#%%
+    print("Computing Isomap 3dim")
+    X_iso_3 = manifold.Isomap(30, n_components=3).fit_transform(total_mfcc[:-1,:])
+
+    fig = plt.figure(2, figsize=(8, 6))
+    ax = Axes3D(fig, elev=-150, azim=110)
+    ax.scatter( X_iso_3[:, 0],  X_iso_3[:, 1],  X_iso_3[:, 2], c=labels[:-1],
+               cmap=plt.cm.Paired)
+    ax.set_title("Isomap 3dim")
+    ax.set_xlabel("1st")
+    ax.w_xaxis.set_ticklabels([])
+    ax.set_ylabel("2nd")
+    ax.w_yaxis.set_ticklabels([])
+    ax.set_zlabel("3rd")
+    ax.w_zaxis.set_ticklabels([])
+    
+    plt.show()
+  
+    fig = plt.figure(3, figsize=(8, 6))
+    ax = Axes3D(fig, elev=-150, azim=110)
+    print("Computing PCA")    
+    X_reduced = PCA(n_components=3).fit_transform(total_mfcc[:-1,:])
+    ax.scatter( X_reduced[:, 0],  X_reduced[:, 1],  X_reduced[:, 2], c=labels[:-1],
+               cmap=plt.cm.Paired)
+    ax.set_title("First three PCA directions")
+    ax.set_xlabel("1st eigenvector")
+    ax.w_xaxis.set_ticklabels([])
+    ax.set_ylabel("2nd eigenvector")
+    ax.w_yaxis.set_ticklabels([])
+    ax.set_zlabel("3rd eigenvector")
+    ax.w_zaxis.set_ticklabels([])
+    
+    plt.show()
