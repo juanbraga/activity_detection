@@ -160,3 +160,16 @@ if __name__ == "__main__":
     plt.ylabel('zcr')
     plt.grid()
     plt.axis('tight')
+    
+
+#%%
+
+    from sklearn import tree 
+    tree_clf = tree.DecisionTreeClassifier()
+    tree_clf.fit(X_train, y_train) 
+    
+    # TEST
+    #tree_clf.predict(X_test)
+    tree_clf.score(X_test,y_test)
+    
+    
