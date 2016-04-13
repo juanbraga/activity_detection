@@ -124,3 +124,11 @@ if __name__ == "__main__":
     
     plt.show()
     
+    from sklearn import svm
+    svm_clf = svm.SVC(C=1.1111111111111112, cache_size=250007, class_weight=None, coef0=0.0,
+        decision_function_shape='ovo', degree=1, gamma='auto', kernel='linear',
+        max_iter=-1, probability=False, random_state=None, shrinking=True,
+        tol=0.001, verbose=False)      
+    svm_clf.fit(total_mfcc[:-1,:], labels[:-1]) 
+    svm_clf.score(total_mfcc[:-1,:], labels[:-1]) 
+    

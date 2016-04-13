@@ -1,1 +1,8 @@
 *.pyc
+*.dot
+*.aux
+*.bbl
+*.blg
+*.dvi
+*.log
+*.gz
