@@ -102,6 +102,7 @@ if __name__ == "__main__":
     plt.hist([total_mc_activity, total_mc_silence], bins = 200)
     
 #%%
+        
     plt.figure()
     plt.clf()
     target = np.r_[np.ones(len(total_ae_activity)), np.zeros(len(total_ae_silence))]
@@ -111,3 +112,64 @@ if __name__ == "__main__":
     plt.ylabel('zcr')
     plt.grid()
     plt.axis('tight')
+    
+    #%%
+    plt.figure()
+    plt.clf()
+    plt.subplot(2,1,1)    
+    plt.scatter(total_ae_silence,total_zcr_silence)
+    plt.legend(loc='best')    
+    plt.xlabel('ae')
+    plt.xlim([0, 4000])
+    plt.ylim([0, 1])
+    plt.ylabel('zcr')
+    plt.grid()
+    plt.subplot(2,1,2)    
+    plt.scatter(total_ae_activity, total_zcr_activity)
+    plt.legend(loc='best')    
+    plt.xlabel('ae')
+    plt.ylim([0, 1])    
+    plt.xlim([0, 4000])
+    plt.ylabel('zcr')
+    plt.grid()
+    
+    #%%
+    # TRAIN
+    from sklearn import svm
+    ntest_activity = 900
+    ntest_silence = 200
+    y_train = np.r_[np.ones(len(total_ae_activity)-ntest_activity), np.zeros(len(total_ae_silence)-ntest_silence)]
+    X_train = np.c_[np.r_[total_ae_activity[:-ntest_activity], total_ae_silence[:-ntest_silence]], np.r_[total_zcr_activity[:-ntest_activity], total_zcr_silence[:-ntest_silence]]] 
+    y_test = np.r_[np.ones(ntest_activity), np.zeros(ntest_silence)]
+    X_test = np.c_[np.r_[total_ae_activity[-ntest_activity:len(total_ae_activity)], total_ae_silence[-ntest_silence:len(total_ae_silence)]], np.r_[total_zcr_activity[-ntest_activity:len(total_zcr_activity)], total_zcr_silence[-ntest_silence:len(total_zcr_silence)]]]     
+    svm_clf = svm.SVC(C=1.1111111111111112, cache_size=250007, class_weight=None, coef0=0.0,
+        decision_function_shape='ovo', degree=1, gamma='auto', kernel='linear',
+        max_iter=-1, probability=False, random_state=None, shrinking=True,
+        tol=0.001, verbose=False)      
+    svm_clf.fit(X_train, y_train) 
+        
+    #%% TEST
+    #svm_clf.predict(X_test)
+    svm_clf.score(X_test, y_test)
+    
+    plt.figure()
+    plt.clf()
+    plt.scatter(X_test[:,0], X_test[:,1], c=y_test)
+    plt.legend(loc='best')    
+    plt.xlabel('ae')
+    plt.ylabel('zcr')
+    plt.grid()
+    plt.axis('tight')
+    
+
+#%%
+
+    from sklearn import tree 
+    tree_clf = tree.DecisionTreeClassifier()
+    tree_clf.fit(X_train, y_train) 
+    
+    # TEST
+    #tree_clf.predict(X_test)
+    tree_clf.score(X_test,y_test)
+    
+    
