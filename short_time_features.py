@@ -5,7 +5,7 @@ from scipy import signal
 import matplotlib.pyplot as plt
 import scipy.io.wavfile as wav
 
-def zero_crossing_rate(audio, fs=44100, n=1024):
+def zero_crossing_rate(audio, fs=44100, n=1024):    
     
     result = np.empty(len(audio)/n)
     audio_sgn = np.sign(audio)    
