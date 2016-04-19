@@ -5,7 +5,7 @@ from scipy import signal
 import matplotlib.pyplot as plt
 import scipy.io.wavfile as wav
 
-def zero_crossing_rate(audio, fs=44100, n=1024):
+def zero_crossing_rate(audio, fs=44100, n=1024):    
     
     result = np.empty(len(audio)/n)
     audio_sgn = np.sign(audio)    
@@ -174,6 +174,10 @@ if __name__ == "__main__":
     #tree_clf.predict(X_test)
     tree_clf.score(X_test,y_test)
     
+<<<<<<< HEAD
 #%% FILTRATE
     
     
+=======
+    
+>>>>>>> a11cc7f3be62ad62efc41901bb03376b7bf42e4c
