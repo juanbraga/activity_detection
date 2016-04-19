@@ -91,7 +91,7 @@ if __name__ == "__main__":
 #    plt.axis('tight')    
 
 #%%
-    plt.figure()    
+    plt.figure(figsize=(8, 6))    
     plt.subplot(3,1,1)    
     plt.hist([total_zcr_activity, total_zcr_silence], bins = 200)
     plt.axis('tight')
@@ -100,6 +100,8 @@ if __name__ == "__main__":
     plt.axis('tight')    
     plt.subplot(3,1,3)    
     plt.hist([total_mc_activity, total_mc_silence], bins = 200)
+    
+    plt.savefig('docs/hists.eps', format='eps', dpi=1000)
     
 #%%
         
@@ -171,5 +173,7 @@ if __name__ == "__main__":
     # TEST
     #tree_clf.predict(X_test)
     tree_clf.score(X_test,y_test)
+    
+#%% FILTRATE
     
     

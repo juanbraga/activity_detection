@@ -10,6 +10,7 @@ def tonalness(audio, fs=44100, nfft=1024, noverlap=512):
     f, t_S, Sxx = signal.spectrogram(audio, fs, window='hamming', nperseg=nfft, noverlap=noverlap, nfft=None, detrend='constant', return_onesided=True, scaling='density', axis=-1)
     
     ind_max = np.argmax(Sxx,axis=0)
+    f0_max = f[ind_max]
     ind_peaks = np.c_[ind_max]
     
     S_harmonics = np.empty(ind_max.shape)
@@ -20,7 +21,7 @@ def tonalness(audio, fs=44100, nfft=1024, noverlap=512):
     E = E - S_harmonics
     result = np.divide(S_harmonics,E)    
     
-    return result, Sxx, f, t_S
+    return result, f0_max, Sxx, f, t_S
 
 
 if __name__ == "__main__":  

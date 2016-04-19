@@ -3,58 +3,75 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy.io.wavfile as wav
+import csv
 
-def morph_close(audio, length):
+def morph_close(audio, fs=44100, n=1024):
     
     result=np.zeros(np.size(audio))
-    l=length/2+1  
+    l=n/2+1  
     audio_abs=np.abs(audio)
     for i in range(l,len(audio)-l):
         result[i]=np.max(audio_abs[i-l:i+l])
+    t = np.arange(len(result)) * (float(n)/fs)  
         
-    return result, audio_abs
-
+    return result, t, audio_abs
+    
+def set_threshold(fragment):
+    
+    silence_file = fragment + '_silence.wav'
+    activity_file = fragment + '_activity.wav'
+    
+    fs, audio_silence = wav.read(silence_file)
+    fs, audio_activity = wav.read(activity_file)        
+    
+    frame_size=512
+    
+    mc_silence, t_mc_silence, dummy = morph_close(audio_silence, fs, n=frame_size)  
+    mc_activity, t_mc_activity, dummy = morph_close(audio_activity, fs, n=frame_size)
+    
+    plt.figure()
+    plt.hist([mc_activity, mc_silence], bins = 200)
+    plt.grid()
+    plt.axis('tight')
+    plt.show()
+    
+    var_activity = np.var(mc_activity)
+    var_silence = np.var(mc_silence)
+    
+    return var_activity, var_silence
+    
 
 if __name__ == "__main__":
     
-    fragment = '../traditional_dataset/density/fragments/density_first_fragment_zoon'
+    dataset=[]    
+    cr = csv.reader(open('dataset.csv',"rb"))
+    for row in cr:
+        dataset.append(row[0]) 
 
-#    fragment = '../traditional_dataset/syrinx/fragments/syrinx_first_fragment_douglas'
-#    fragment = '../traditional_dataset/syrinx/fragments/syrinx_second_fragment_dwyer'
-#    fragment = '../traditional_dataset/syrinx/fragments/syrinx_third_fragment_rhodes'
-#    fragment = '../traditional_dataset/syrinx/fragments/syrinx_fourth_fragment_bernold'
-#    fragment = '../traditional_dataset/syrinx/fragments/syrinx_fifth_fragment_bourdin'
-    
-#    fragment = '../traditional_dataset/allemande/fragments/allemande_first_fragment_nicolet'
-#    fragment = '../traditional_dataset/allemande/fragments/allemande_second_fragment_gerard'
-#    fragment = '../traditional_dataset/allemande/fragments/allemande_third_fragment_rampal'
-#    fragment = '../traditional_dataset/allemande/fragments/allemande_fourth_fragment_larrieu'
-#    fragment = '../traditional_dataset/allemande/fragments/allemande_fifth_fragment_preston'
+    fragment = dataset[0]    
     
     audio_file = fragment + '_mono.wav'
     gt_file = fragment + '.csv'
     
     fs, audio = wav.read(audio_file)
-    t = np.arange(len(audio)) * (1/44100.0)    
+    t = np.arange(len(audio)) * (1/float(fs))    
     
-    audio_closed, audio_abs = morph_close(audio, 4*880+1)
-    
+    audio_closed, t_mc, audio_abs = morph_close(audio, 4*880+1)
     
     plt.figure(figsize=(18,6)) 
-    plt.plot(t, audio_abs, 'r', label='wave')  
-    plt.plot(t, audio_closed, 'k', label='envelope')
+    plt.plot(t_mc, audio_abs, 'r', label='wave')  
+    plt.plot(t_mc, audio_closed, 'k', label='envelope')
     plt.grid()
-    
-    import csv
-    cr = csv.reader(open(gt_file,"rb"))
+
     onset=[]
     notes=[]
+    cr = csv.reader(open(gt_file,"rb"))
     for row in cr:
         onset.append(row[0]) 
         notes.append(row[1])
     onset = np.array(onset, 'float32')
     i=0
-    aux_vad_gt = np.empty([0,])
+    aux_vad_gt = np.empty([0,], 'int8')
     for note in notes:
         if note=='0':
             aux_vad_gt = np.r_[aux_vad_gt,0]
@@ -62,13 +79,12 @@ if __name__ == "__main__":
             aux_vad_gt = np.r_[aux_vad_gt,1]
         i=i+1
     j=0
-    vad_gt = np.empty([len(t),], 'float32')
+    vad_gt = np.empty([len(t),], 'int8')
     for i in range(1,len(onset)):
         while (j<len(t) and t[j]>=onset[i-1] and t[j]<=onset[i]):
             vad_gt[j]=aux_vad_gt[i-1]
             j=j+1     
-            
-#%%    
+
     plt.figure(figsize=(18,6))
     plt.subplot(2,1,1)
     plt.plot(t,audio)
@@ -84,3 +100,6 @@ if __name__ == "__main__":
     plt.legend(loc='best')
     plt.tight_layout()
     plt.show()
+    
+#%%
+    thershold_activity, thershold_silence = set_threshold(fragment)
