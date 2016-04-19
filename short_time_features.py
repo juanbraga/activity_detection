@@ -173,11 +173,7 @@ if __name__ == "__main__":
     # TEST
     #tree_clf.predict(X_test)
     tree_clf.score(X_test,y_test)
-    
-<<<<<<< HEAD
+
 #%% FILTRATE
     
-    
-=======
-    
->>>>>>> a11cc7f3be62ad62efc41901bb03376b7bf42e4c
+

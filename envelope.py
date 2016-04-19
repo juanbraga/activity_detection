@@ -102,4 +102,26 @@ if __name__ == "__main__":
     plt.show()
     
 #%%
-    thershold_activity, thershold_silence = set_threshold(fragment)
+#    thershold_activity, thershold_silence = set_threshold(fragment)
+
+    silence_file = fragment + '_silence.wav'
+    activity_file = fragment + '_activity.wav'
+    
+    fs, audio_silence = wav.read(silence_file)
+    fs, audio_activity = wav.read(activity_file)        
+    
+    frame_size=512
+    
+    mc_silence, t_mc_silence, dummy = morph_close(audio_silence, fs, n=frame_size)  
+    mc_activity, t_mc_activity, dummy = morph_close(audio_activity, fs, n=frame_size)
+    
+    plt.figure()
+    plt.hist([mc_activity, mc_silence], bins = 200)
+    plt.grid()
+    plt.axis('tight')
+    plt.show()
+
+    mean_activity = np.mean(mc_activity)
+    mean_silence = np.mean(mc_silence)    
+    stddev_activity = np.sqrt(np.var(mc_activity))
+    stddev_silence = np.sqrt(np.var(mc_silence))
