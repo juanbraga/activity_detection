@@ -114,14 +114,35 @@ if __name__ == "__main__":
     
     mc_silence, t_mc_silence, dummy = morph_close(audio_silence, fs, n=frame_size)  
     mc_activity, t_mc_activity, dummy = morph_close(audio_activity, fs, n=frame_size)
-    
-    plt.figure()
-    plt.hist([mc_activity, mc_silence], bins = 200)
-    plt.grid()
-    plt.axis('tight')
-    plt.show()
 
     mean_activity = np.mean(mc_activity)
     mean_silence = np.mean(mc_silence)    
     stddev_activity = np.sqrt(np.var(mc_activity))
     stddev_silence = np.sqrt(np.var(mc_silence))
+    
+#%%
+    plt.figure(figsize=(18,6))
+    plt.hist([mc_activity, mc_silence], bins = 100)
+    plt.grid()
+    plt.axvline(mean_activity-stddev_activity, color='r', linestyle='dashed', linewidth=2)
+    plt.axvline(mean_silence+stddev_silence, color='y', linestyle='dashed', linewidth=2)    
+    plt.axis('tight')
+    plt.show()
+
+#%%
+    plt.figure(figsize=(18,6))
+    plt.subplot(2,1,1)
+    plt.plot(t,audio)
+    plt.plot(t,(2**12)*vad_gt, label='VAD_gt')
+    plt.grid()
+    plt.title(fragment)
+    plt.tight_layout()
+    plt.subplot(2,1,2)
+    plt.plot(t,audio_closed, label='envelope')
+    plt.plot(t,np.ones(len(t))*(mean_activity-stddev_activity),label='threshold')
+    plt.plot(t,(2**12)*vad_gt, label='VAD_gt')
+    plt.grid()
+    plt.xlabel('Time (s)')
+    plt.legend(loc='best')
+    plt.tight_layout()
+    plt.show()

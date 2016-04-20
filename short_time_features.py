@@ -91,7 +91,7 @@ if __name__ == "__main__":
 #    plt.axis('tight')    
 
 #%%
-    plt.figure(figsize=(8, 6))    
+    plt.figure(figsize=(18, 6))    
     plt.subplot(3,1,1)    
     plt.hist([total_zcr_activity, total_zcr_silence], bins = 200)
     plt.axis('tight')
