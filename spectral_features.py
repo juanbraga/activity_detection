@@ -46,8 +46,8 @@ if __name__ == "__main__":
         nfft=4096
         overlap=nfft/2
         
-        tness_activity, Sxx, f, t_S = tonalness(audio_activity, fs, nfft, overlap)
-        tness_silence, Sxx, f, t_S = tonalness(audio_silence, fs, nfft, overlap)
+        tness_activity, dummy, Sxx, f, t_S = tonalness(audio_activity, fs, nfft, overlap)
+        tness_silence, dummy, Sxx, f, t_S = tonalness(audio_silence, fs, nfft, overlap)
         
         total_tness_activity = np.r_[total_tness_activity,tness_activity]
         total_tness_silence = np.r_[total_tness_silence,tness_silence]

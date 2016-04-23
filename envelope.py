@@ -93,7 +93,7 @@ if __name__ == "__main__":
     plt.title(fragment)
     plt.tight_layout()
     plt.subplot(2,1,2)
-    plt.plot(t,audio_closed, label='envelope')
+    plt.plot(t_mc,audio_closed, label='envelope')
     plt.plot(t,(2**12)*vad_gt, label='VAD_gt')
     plt.grid()
     plt.xlabel('Time (s)')
@@ -146,3 +146,17 @@ if __name__ == "__main__":
     plt.legend(loc='best')
     plt.tight_layout()
     plt.show()
+    
+#%% APPLY THRESHOLD
+    
+    thr=mean_activity-5*stddev_activity/4    
+    aux = np.clip(audio_closed, 0, thr)
+    aux[aux<thr] = 0
+    aux = aux/thr
+    plt.figure(figsize=(18,6))
+    plt.plot(t,audio)
+    plt.plot(t, (2**12)*aux)
+    plt.plot(t,(2**12)*vad_gt)
+    plt.grid()
+    plt.show()    
+    
