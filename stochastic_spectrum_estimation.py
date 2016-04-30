@@ -45,7 +45,7 @@ if __name__ == "__main__":
     for row in cr:
         dataset.append(row[0]) 
     
-    audio_file = dataset[11] + '_mono.wav'
+    audio_file = dataset[4] + '_mono.wav'
     fs, audio = wav.read(audio_file)
     t = np.arange(len(audio)) * float(1)/fs
         
@@ -160,4 +160,10 @@ if __name__ == "__main__":
     
     #%%
     np.savetxt("sse_env.csv", np.c_[t_S, env], delimiter=",")
-    
+
+    #%%
+
+    plt.figure()
+    plt.pcolormesh(t_S, f, 20*np.log(Sxx-SSE))
+    plt.axis('tight')
+    plt.show()    
