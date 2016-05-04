@@ -10,9 +10,12 @@ def zero_crossing_rate(audio, fs=44100, n=1024):
     result = np.empty(len(audio)/n)
     audio_sgn = np.sign(audio)    
     for i in range(0,len(audio)/n):
-        result[i] = (np.sum(np.absolute(np.diff(audio_sgn[i*n:(i+1)*n])))/float(n))
-    t = np.arange(len(result)) * (float(n)/fs)    
-    return result, t
+        result[i] = (np.sum(np.absolute(np.diff(audio_sgn[i*n:(i+1)*n])))/float(2*n))
+    t = np.arange(len(result)) * (float(n)/fs) 
+    result_f = (1000*float(fs)/(n))*result
+    return result, result_f, t
+    
+    #%%
 
 def average_energy(audio, fs=44100, n=1024):
     
@@ -175,5 +178,21 @@ if __name__ == "__main__":
     tree_clf.score(X_test,y_test)
 
 #%% FILTRATE
+    import scipy.io.wavfile as wav
     
-
+    Fs = 44100
+    f = 1
+    sample = 44100
+    x = np.arange(sample)
+    t = x/float(sample);
+    y = np.sin(2 * np.pi * f * x / Fs)    
+    
+    fs, audio = wav.read("C:/Users/juan.braga/Desktop/audio_dataset/UrbanSound/data/siren/26173.wav")
+    zcr, f0, t_zcr = zero_crossing_rate(y, fs=44100, n=22050)
+    plt.figure()
+    plt.subplot(2,1,1)    
+    plt.plot(t,y)
+    plt.grid()
+    plt.subplot(2,1,2)    
+    plt.plot(t_zcr, zcr)
+    plt.grid()
