@@ -19,9 +19,10 @@ def zero_crossing_rate(audio, fs=44100, n=1024):
 
 def average_energy(audio, fs=44100, n=1024):
     
+    Ew = np.sum(np.hamming(n)**2)
     result = np.empty(len(audio)/n)
     for i in range(0,len(audio)/n):
-        result[i] = (np.sum(np.absolute(np.hamming(n)*audio[i*n:(i+1)*n]))/float(n))
+        result[i] = (np.sum(np.absolute(np.hamming(n)*audio[i*n:(i+1)*n]))/(float(n)*Ew))
     t = np.arange(len(result)) * (float(n)/fs)      
     return result, t
    
