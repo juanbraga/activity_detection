@@ -62,7 +62,7 @@ if __name__ == "__main__":
     for row in cr:
         dataset.append(row[0]) 
     
-    audio_file = dataset[6] + '_mono.wav'
+    audio_file = dataset[4] + '_mono.wav'
     print audio_file
     fs, audio = wav.read(audio_file)
     t = np.arange(len(audio)) * float(1)/fs
@@ -88,8 +88,8 @@ if __name__ == "__main__":
     sig_env2, t_dummy = stf.average_energy(audio,fs,nfft)
     
     plt.figure(figsize=(18,6))
-    plt.plot(t_S,sig_env,color='green',label='spectral energy')
-    plt.plot(t_S,sig_env2,color='black',label='rms')
+    plt.plot(t_S,20*np.log(sig_env/max(sig_env)),color='green',label='spectral energy')
+    plt.plot(t_S,20*np.log(sig_env2/max(sig_env2)),color='black',label='rms')
     plt.grid()
     plt.legend(loc='best')
     plt.axis('tight')
@@ -102,8 +102,8 @@ if __name__ == "__main__":
     plt.pcolormesh(t_S, f, 20*np.log(SSE))
     plt.axis('tight')    
     plt.subplot(5,1,5)
-    plt.plot(t_S, sse_env/max(sse_env), color='red', label='sse_env')
-    plt.plot(t_S, sig_env/max(sig_env), color='green', label='sig_env')
+    plt.plot(t_S, 20*np.log(sse_env), color='red', label='sse_env')
+    plt.plot(t_S, 20*np.log(sig_env), color='green', label='sig_env')
     plt.legend(loc='best')
     plt.axis('tight')
     plt.grid()

@@ -9,6 +9,10 @@ import numpy as np
 from scipy import signal
 import matplotlib.pyplot as plt
 import scipy.io.wavfile as wav
+import scipy.fftpack as fft
+
+def stft(x, fs, win, hop):
+    pass
 
 if __name__ == "__main__":  
 
@@ -31,16 +35,27 @@ if __name__ == "__main__":
 #    plt.axis('tight')
 
     nfft = 512
-    noverlap=nfft/2
+    noverlap=(3*nfft)/4
     
     f, t_S, S = signal.spectrogram(audio, fs, window='hamming', nperseg=nfft, 
                                      noverlap=noverlap, nfft=None, detrend='constant',
-                                     return_onesided=False, scaling='spectrum', axis=-1, mode='complex')
+                                     return_onesided=True, scaling='density', axis=-1, mode='complex')
                                     
     Sxx = np.abs(S) 
     
     plt.figure()
     plt.pcolormesh(t_S, f, 20*np.log(Sxx))
+    plt.axis('tight')
+    
+    X = fft.fft(audio)
+    X_r = fft.rfft(audio)
+    
+    #%%
+    plt.figure(figsize=(18,6))
+    plt.plot(abs(X_r),label='rfft')
+    plt.plot(abs(X),label='fft')
+    plt.legend(loc='best')
+    plt.grid()
     plt.axis('tight')
                                      
     
