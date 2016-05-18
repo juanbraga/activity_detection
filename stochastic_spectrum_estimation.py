@@ -82,9 +82,12 @@ if __name__ == "__main__":
 #    plt.show()
     
     SSE, env = sse(Sxx)    
-    Ew = np.sum(np.hamming(Sxx.shape[0])**2)
+
     env_spec = time_env(Sxx)
+
+    Ew = np.sum(np.hamming(Sxx.shape[0])**2)
     env_spec2 = np.sqrt(np.sum(Sxx,axis=0)/(Sxx.shape[0]*Ew))
+
     env_spec3, t = stf.average_energy(audio,fs,nfft)
     
     plt.figure()
@@ -97,13 +100,13 @@ if __name__ == "__main__":
     plt.pcolormesh(t_S, f, 20*np.log(SSE))
     plt.axis('tight')
     plt.subplot(4,1,4)
-    plt.plot(t_S, env, color='red')
-    plt.plot(t_S, env_spec, color='green')
+    plt.plot(t_S, env/max(env_spec), color='red')
+    plt.plot(t_S, env_spec/max(env_spec), color='green')
     plt.axis('tight')
     plt.grid()
     plt.show()
 
    
     env_filt = mean_filter(env, n=4)
-    np.savetxt("sse_env.csv", np.c_[t_S, env], delimiter=",")
+    np.savetxt("sse_env.csv", np.c_[t_S, env, env_spec], delimiter=",")
     scipy.io.savemat('sse', mdict={'sse':SSE,'t':t_S,'f':f,'win':np.hamming(nfft),'noverlap':noverlap})
