@@ -58,7 +58,7 @@ if __name__ == "__main__":
     for row in cr:
         dataset.append(row[0]) 
     
-    audio_file = dataset[6] + '_mono.wav'
+    audio_file = dataset[4] + '_mono.wav'
     print audio_file
     fs, audio = wav.read(audio_file)
     t = np.arange(len(audio)) * float(1)/fs
@@ -100,8 +100,7 @@ if __name__ == "__main__":
     S, f, t_S = stft(audio, fs, nfft, (nfft-noverlap))
     SSE, env = sse.sse(np.abs(S))
     
-    #%%
-     
+#%%
     plt.figure()
     plt.subplot(2,1,1)
     plt.pcolormesh(t_S, f, 20*np.log(np.abs(S)))
@@ -109,8 +108,7 @@ if __name__ == "__main__":
     plt.subplot(2,1,2) 
     plt.pcolormesh(t_S, f, 20*np.log(SSE))
     plt.axis('tight')
-
+    
 #%%    
-    
     S_resynth = P2R(SSE,np.angle(S))
-    
+    resynth, t_resynth = istft(S_resynth,fs,nfft,(nfft-noverlap))
