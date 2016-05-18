@@ -44,11 +44,12 @@ def time_env(M):
     for i in range(0,M.shape[1]):   
         EB[i] = np.sum(M[:,i])
     Eg = EB/Ew
-    env = np.sqrt(Eg/M.shape[0])
+    aux_env = np.sqrt(Eg/M.shape[0])
     
-    return env
+#    aux_env2 = np.sqrt(np.sum(M,axis=0)/(M.shape[0]*Ew))  
     
-           
+    return aux_env #, aux_env2 
+    
 if __name__ == "__main__":  
 
     plt.close("all")
@@ -59,7 +60,7 @@ if __name__ == "__main__":
     for row in cr:
         dataset.append(row[0]) 
     
-    audio_file = dataset[6] + '_mono.wav'
+    audio_file = dataset[4] + '_mono.wav'
     print audio_file
     fs, audio = wav.read(audio_file)
     t = np.arange(len(audio)) * float(1)/fs
@@ -75,38 +76,37 @@ if __name__ == "__main__":
     f, t_S, Sxx = signal.spectrogram(audio, fs, window='hamming', nperseg=nfft, 
                                      noverlap=noverlap, nfft=None, detrend='constant',
                                      return_onesided=True, scaling='spectrum', axis=-1)
-
 #    plt.figure()
 #    plt.pcolormesh(t_S, f, 20*np.log(Sxx))
 #    plt.axis('tight')
 #    plt.show()
     
-    SSE, env = sse(Sxx)    
+    SSE, sse_env = sse(Sxx)    
+    sig_env = time_env(Sxx)
+    sig_env2, t_dummy = stf.average_energy(audio,fs,nfft)
 
-    env_spec = time_env(Sxx)
-
-    Ew = np.sum(np.hamming(Sxx.shape[0])**2)
-    env_spec2 = np.sqrt(np.sum(Sxx,axis=0)/(Sxx.shape[0]*Ew))
-
-    env_spec3, t = stf.average_energy(audio,fs,nfft)
-    
-    plt.figure()
-    plt.plot(t_S,env_spec,color='green')
-    plt.plot(t_S,env_spec2,color='red')
-    plt.plot(t_S,env_spec3,color='black')
-
-    plt.figure()
-    plt.subplot(4,1,(1,3))
-    plt.pcolormesh(t_S, f, 20*np.log(SSE))
+    plt.figure(figsize=(18,6))
+    plt.plot(t_S,20*np.log(sig_env/max(sig_env)),color='green',label='spectral energy')
+    plt.plot(t_S,20*np.log(sig_env2/max(sig_env2)),color='black',label='rms')
+    plt.grid()
+    plt.legend(loc='best')
     plt.axis('tight')
-    plt.subplot(4,1,4)
-    plt.plot(t_S, env/max(env_spec), color='red')
-    plt.plot(t_S, env_spec/max(env_spec), color='green')
+
+    plt.figure()
+    plt.subplot(5,1,(1,2))
+    plt.pcolormesh(t_S, f, 20*np.log(Sxx))
+    plt.axis('tight')
+
+    plt.subplot(5,1,(3,4))
+    plt.pcolormesh(t_S, f, 20*np.log(SSE))
+    plt.axis('tight')    
+    plt.subplot(5,1,5)
+    plt.plot(t_S, 20*np.log(sse_env), color='red', label='sse_env')
+    plt.plot(t_S, 20*np.log(sig_env), color='green', label='sig_env')
+    plt.legend(loc='best')
     plt.axis('tight')
     plt.grid()
     plt.show()
 
-   
-    env_filt = mean_filter(env, n=4)
-    np.savetxt("sse_env.csv", np.c_[t_S, env, env_spec], delimiter=",")
+    np.savetxt("sse_env.csv", np.c_[t_S, sse_env, sig_env], delimiter=",")
     scipy.io.savemat('sse', mdict={'sse':SSE,'t':t_S,'f':f,'win':np.hamming(nfft),'noverlap':noverlap})
