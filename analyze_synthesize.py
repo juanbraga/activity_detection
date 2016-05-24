@@ -111,4 +111,4 @@ if __name__ == "__main__":
     
 #%%    
     S_resynth = P2R(SSE,np.angle(S))
-    resynth, t_resynth = istft(S_resynth,fs,nfft,(nfft-noverlap))
+#    resynth, t_resynth = istft(S_resynth,fs,nfft,(nfft-noverlap))
