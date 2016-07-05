@@ -154,9 +154,9 @@ if __name__ == "__main__":
     aux[aux<thr] = 0
     aux = aux/thr
     plt.figure(figsize=(18,6))
-    plt.plot(t,audio, color='magenta', alpha=0.2, label='Waveform')
-    plt.fill_between(t, -(2**12)*aux,(2**12)*aux*0.5, facecolor='yellow', label='VAD', alpha=0.4)
-    plt.fill_between(t, -(2**12)*vad_gt*0.5,(2**12)*vad_gt, facecolor='cyan', label='GT', alpha=0.4)
+    plt.plot(t,audio, color='black', alpha=0.3, label='Waveform')
+    plt.fill_between(t, -(2**12)*aux,(2**12)*aux*0.5, facecolor='yellow', label='VAD', alpha=0.6)
+    plt.fill_between(t, -(2**12)*vad_gt*0.5,(2**12)*vad_gt, facecolor='cyan', label='GT', alpha=0.6)
     plt.grid()
     plt.axis('tight')
     plt.legend(loc='lower right')
