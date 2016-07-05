@@ -48,7 +48,7 @@ if __name__ == "__main__":
     for row in cr:
         dataset.append(row[0]) 
 
-    fragment = dataset[0]    
+    fragment = dataset[9]    
     
     audio_file = fragment + '_mono.wav'
     gt_file = fragment + '.csv'
@@ -58,10 +58,10 @@ if __name__ == "__main__":
     
     audio_closed, t_mc, audio_abs = morph_close(audio, 4*880+1)
     
-    plt.figure(figsize=(18,6)) 
-    plt.plot(t_mc, audio_abs, 'r', label='wave')  
-    plt.plot(t_mc, audio_closed, 'k', label='envelope')
-    plt.grid()
+#    plt.figure(figsize=(18,6)) 
+#    plt.plot(t_mc, audio_abs, 'r', label='wave')  
+#    plt.plot(t_mc, audio_closed, 'k', label='envelope')
+#    plt.grid()
 
     onset=[]
     notes=[]
@@ -85,21 +85,21 @@ if __name__ == "__main__":
             vad_gt[j]=aux_vad_gt[i-1]
             j=j+1     
 
-    plt.figure(figsize=(18,6))
-    plt.subplot(2,1,1)
-    plt.plot(t,audio)
-    plt.plot(t,(2**12)*vad_gt, label='VAD_gt')
-    plt.grid()
-    plt.title(fragment)
-    plt.tight_layout()
-    plt.subplot(2,1,2)
-    plt.plot(t_mc,audio_closed, label='envelope')
-    plt.plot(t,(2**12)*vad_gt, label='VAD_gt')
-    plt.grid()
-    plt.xlabel('Time (s)')
-    plt.legend(loc='best')
-    plt.tight_layout()
-    plt.show()
+#    plt.figure(figsize=(18,6))
+#    plt.subplot(2,1,1)
+#    plt.plot(t,audio)
+#    plt.plot(t,(2**12)*vad_gt, label='VAD_gt')
+#    plt.grid()
+#    plt.title(fragment)
+#    plt.tight_layout()
+#    plt.subplot(2,1,2)
+#    plt.plot(t_mc,audio_closed, label='envelope')
+#    plt.plot(t,(2**12)*vad_gt, label='VAD_gt')
+#    plt.grid()
+#    plt.xlabel('Time (s)')
+#    plt.legend(loc='best')
+#    plt.tight_layout()
+#    plt.show()
     
 #%%
 #    thershold_activity, thershold_silence = set_threshold(fragment)
@@ -130,33 +130,35 @@ if __name__ == "__main__":
     plt.show()
 
 #%%
-    plt.figure(figsize=(18,6))
-    plt.subplot(2,1,1)
-    plt.plot(t,audio)
-    plt.plot(t,(2**12)*vad_gt, label='VAD_gt')
-    plt.grid()
-    plt.title(fragment)
-    plt.tight_layout()
-    plt.subplot(2,1,2)
-    plt.plot(t,audio_closed, label='envelope')
-    plt.plot(t,np.ones(len(t))*(mean_activity-stddev_activity),label='threshold')
-    plt.plot(t,(2**12)*vad_gt, label='VAD_gt')
-    plt.grid()
-    plt.xlabel('Time (s)')
-    plt.legend(loc='best')
-    plt.tight_layout()
-    plt.show()
+#    plt.figure(figsize=(18,6))
+#    plt.subplot(2,1,1)
+#    plt.plot(t,audio)
+#    plt.plot(t,(2**12)*vad_gt, label='VAD_gt')
+#    plt.grid()
+#    plt.title(fragment)
+#    plt.tight_layout()
+#    plt.subplot(2,1,2)
+#    plt.plot(t,audio_closed, label='envelope')
+#    plt.plot(t,np.ones(len(t))*(mean_activity-stddev_activity),label='threshold')
+#    plt.plot(t,(2**12)*vad_gt, label='VAD_gt')
+#    plt.grid()
+#    plt.xlabel('Time (s)')
+#    plt.legend(loc='best')
+#    plt.tight_layout()
+#    plt.show()
     
 #%% APPLY THRESHOLD
     
-    thr=mean_activity-5*stddev_activity/4    
+    thr=mean_activity-3.5*stddev_activity/4    
     aux = np.clip(audio_closed, 0, thr)
     aux[aux<thr] = 0
     aux = aux/thr
     plt.figure(figsize=(18,6))
-    plt.plot(t,audio)
-    plt.plot(t, (2**12)*aux)
-    plt.plot(t,(2**12)*vad_gt)
+    plt.plot(t,audio, color='magenta', alpha=0.2, label='Waveform')
+    plt.fill_between(t, -(2**12)*aux,(2**12)*aux*0.5, facecolor='yellow', label='VAD', alpha=0.4)
+    plt.fill_between(t, -(2**12)*vad_gt*0.5,(2**12)*vad_gt, facecolor='cyan', label='GT', alpha=0.4)
     plt.grid()
-    plt.show()    
-    
+    plt.axis('tight')
+    plt.legend(loc='lower right')
+    plt.show()     
+#    plt.savefig('docs/prueba.pdf', dpi=600)
