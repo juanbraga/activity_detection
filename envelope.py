@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy.io.wavfile as wav
 import csv
+import tradataset as td
 
 def morph_close(audio, fs=44100, n=1024):
     
@@ -43,10 +44,7 @@ def set_threshold(fragment):
 
 if __name__ == "__main__":
     
-    dataset=[]    
-    cr = csv.reader(open('dataset.csv',"rb"))
-    for row in cr:
-        dataset.append(row[0]) 
+    dataset = td.load_list() 
 
     fragment = dataset[9]    
     
