@@ -159,6 +159,6 @@ if __name__ == "__main__":
     plt.fill_between(t, -(2**12)*vad_gt*0.5,(2**12)*vad_gt, facecolor='cyan', label='GT', alpha=0.6)
     plt.grid()
     plt.axis('tight')
-    plt.legend(loc='lower right')
+    plt.legend(loc='lower right', fancybox=True, framealpha=0.5)
     plt.show()     
 #    plt.savefig('docs/prueba.pdf', dpi=600)
