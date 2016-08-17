@@ -58,7 +58,7 @@ if __name__ == "__main__":
     for row in cr:
         dataset.append(row[0]) 
     
-    audio_file = dataset[4] + '_mono.wav'
+    audio_file = dataset[8] + '_mono.wav'
     print audio_file
     fs, audio = wav.read(audio_file)
     t = np.arange(len(audio)) * float(1)/fs
@@ -111,4 +111,9 @@ if __name__ == "__main__":
     
 #%%    
     S_resynth = P2R(SSE,np.angle(S))
-#    resynth, t_resynth = istft(S_resynth,fs,nfft,(nfft-noverlap))
+    resynth, t_resynth = istft(S_resynth,fs,nfft,(nfft-noverlap))
+
+#%%    
+
+    plt.figure()
+    plt.plot(resynth)

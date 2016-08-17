@@ -92,6 +92,8 @@ if __name__ == "__main__":
     plt.legend(loc='best')
     plt.axis('tight')
 
+#%%
+
     plt.figure()
     plt.subplot(5,1,(1,2))
     plt.pcolormesh(t_S, f, 20*np.log(Sxx))
@@ -101,9 +103,9 @@ if __name__ == "__main__":
     plt.pcolormesh(t_S, f, 20*np.log(SSE))
     plt.axis('tight')    
     plt.subplot(5,1,5)
-    plt.plot(t_S, 20*np.log(sse_env), color='red', label='sse_env')
-    plt.plot(t_S, 20*np.log(sig_env), color='green', label='sig_env')
-    plt.legend(loc='best')
+    plt.plot(t_S, (sse_env), color='red', label='sse_env')
+#    plt.plot(t_S, (sig_env), color='green', label='sig_env')
+    plt.legend(loc='upper left')
     plt.axis('tight')
     plt.grid()
     plt.show()
