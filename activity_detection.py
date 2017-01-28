@@ -30,7 +30,7 @@ t = np.arange(len(audio)) * float(1)/fs
 frame_size = 512
 hop = frame_size
 ae, t_ae = stf.average_energy(audio, n=frame_size)
-zcr, t_zcr = stf.zero_crossing_rate(audio, n=frame_size)
+zcr, zcr_frec, t_zcr = stf.zero_crossing_rate(audio, n=frame_size)
 
 import csv
 cr = csv.reader(open(gt_file,"rb"))
